@@ -4,23 +4,17 @@ import matplotlib.pyplot as plt
 import random # Para la generación de números aleatorios
 
 
-# Para que la comparativa sea justa, usaremos el mismo número de puntos
-# En el ejercicio anterior se tenía M = 256, lo que daba 128 pares (x, y)
-N_PARES = 128
+# Leer los datos generados por C++
+try:
+    df = pd.read_csv('6to_punto.csv')
+except FileNotFoundError:
+    print("Error: El archivo 'datos_aleatorios.csv' no existe. Corre primero el codigo en C++.")
+    exit()
 
-x_pc = []
-y_pc = []
+# Graficar LCA (Datos de C++)
+plt.scatter(df['x_lca'], df['y_lca'], s=2, color='purple', alpha=0.6)
+plt.title("LCA 48-bits (Desde C++)")
 
-for _ in range(N_PARES):
-    # random.random() genera un flotante entre 0 y 1
-    x_pc.append(random.random() * 256)
-    y_pc.append(random.random() * 256)
 
-# Graficar
-plt.figure(figsize=(6,6))
-plt.scatter(x_pc, y_pc, color='green', s=15, alpha=0.7)
-plt.title("Generador de mi Computador (random.random)")
-plt.xlabel("x")
-plt.ylabel("y")
-plt.grid(True, linestyle='--', alpha=0.5)
+plt.tight_layout()
 plt.show()
