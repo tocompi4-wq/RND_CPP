@@ -1,0 +1,60 @@
+# --- PUNTO 2: Probar una elección poco recomendable ---
+# Parametros
+a2 = 57 # Multuiplicador
+c2 = 1 # Incremento
+M2 = 256 # Módulo
+r2 = 10 # Semilla inicial (r0)
+
+def lineal_congruente(a2, c2, M2, r2):
+  r2_list = [r2]
+  for i in range(2 * M2):
+    r2 = (a2 * r2 + c2) % M2
+    r2_list.append(r2)
+  return r2_list
+
+print(lineal_congruente(a2, c2, M2, r2))
+
+def detectar_periodo(a2, c2, M2, semilla):
+    vistos = {}  # Diccionario para guardar {valor: posicion}
+    r2 = semilla
+    posicion = 0
+    
+    while r2 not in vistos:
+        vistos[r2] = posicion  # Guardamos el número y en qué índice apareció
+        r2 = (a2 * r2 + c2) % M2   # Generamos el siguiente
+        posicion += 1
+        
+    # Si salimos del bucle, es porque r YA estaba en vistos
+    inicio_repeticion = vistos[r2]
+    longitud_periodo = posicion - inicio_repeticion
+    
+  
+    return inicio_repeticion, longitud_periodo, r2
+
+ini, lon, num = detectar_periodo(a2, c2, M2, semilla=r2)
+print(f"Se repitió el número {num} que apareció primero en la posición {ini}.")
+print(f"La longitud del periodo es de {lon} números.")
+
+def generar_secuencia(a2, c2, M2, r2):
+    res = []
+    actual = r2
+    # Generamos un ciclo completo para ver el patrón
+    for _ in range(M2):
+        actual = (a2 * actual + c2) % M2
+        res.append(actual)
+    return res
+
+secuencia = generar_secuencia(a2, c2, M2, r2)
+
+# --- PUNTO 3: Crear los pares (xi, yi) ---
+x = secuencia[0::2] # Toma los elementos en posiciones pares (r1, r3, r5...)
+y = secuencia[1::2] # Toma los elementos en posiciones impares (r2, r4, r6...)
+
+# Graficar
+plt.figure(figsize=(6,6))
+plt.scatter(x, y, color='red', s=15) # s es el tamaño del punto
+plt.title(f"Prueba de Correlación (M={M}, a={a})")
+plt.xlabel("r_{2i-1}")
+plt.ylabel("r_{2i}")
+plt.grid(True, linestyle='--', alpha=0.6)
+plt.show()
