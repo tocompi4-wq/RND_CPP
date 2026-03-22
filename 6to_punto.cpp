@@ -1,48 +1,41 @@
 #include <iostream>
-#include <vector>
 #include <random>
-#include <iomanip> // Para controlar los decimales (precision)
+#include <iomanip>
 
 using namespace std;
 
-// Definimos M como 2^48 usando desplazamiento de bits (1 desplazado 48 veces)
+// Parámetros de "Trabajo Serio"
 const unsigned long long M = 1ULL << 48; 
 const unsigned long long A = 0x5DEECE66DULL;
 const unsigned long long C = 0xBULL;
 
 int main() {
     int N_PUNTOS = 1000;
-    unsigned long long actual = 10; // Semilla (r)
+    unsigned long long actual = 10; // Semilla para tu LCA
 
-    // --- 1. Generar pares con LCA Grande (Parámetros Java) ---
-    cout << "--- DATOS LCA GRANDE (48-bits) ---" << endl;
-    cout << "x_lca,y_lca" << endl;
-    
-    for (int i = 0; i < N_PUNTOS; i++) {
-        // Generamos x
-        actual = (A * actual + C) % M;
-        double x = (double)actual / M;
-        
-        // Generamos y
-        actual = (A * actual + C) % M;
-        double y = (double)actual / M;
-        
-        // Imprimimos con 6 decimales
-        cout << fixed << setprecision(6) << x << "," << y << endl;
-    }
-
-    cout << "\n--- DATOS GENERADOR PC (Mersenne Twister) ---" << endl;
-    cout << "x_pc,y_pc" << endl;
-
-    // --- 2. Generar pares con el motor de la PC ---
+    // Configurar el generador de la PC
     random_device rd; 
-    mt19937 gen(rd()); // Motor Mersenne Twister
+    mt19937 gen(rd()); 
     uniform_real_distribution<double> dis(0.0, 1.0);
 
+    // IMPRIMIR ENCABEZADO (Muy importante para Python)
+    cout << "x_lca,y_lca,x_pc,y_pc" << endl;
+
     for (int i = 0; i < N_PUNTOS; i++) {
+        // 1. Generar coordenadas para TU algoritmo (LCA)
+        actual = (A * actual + C) % M;
+        double x_lca = (double)actual / M;
+        actual = (A * actual + C) % M;
+        double y_lca = (double)actual / M;
+
+        // 2. Generar coordenadas para el Generador de la PC
         double x_pc = dis(gen);
         double y_pc = dis(gen);
-        cout << fixed << setprecision(6) << x_pc << "," << y_pc << endl;
+
+        // 3. Imprimir las 4 columnas en una sola línea
+        cout << fixed << setprecision(6) 
+             << x_lca << "," << y_lca << "," 
+             << x_pc << "," << y_pc << endl;
     }
 
     return 0;
