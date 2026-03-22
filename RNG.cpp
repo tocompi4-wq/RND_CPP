@@ -27,8 +27,7 @@ int main() {
     // Llamamos a la función
     vector<int> resultado = lineal_congruente(a, c, M, r);
 
-    // En C++ no podemos imprimir la lista completa con un solo "print".
-    // Tenemos que recorrerla con un ciclo:
+    // Imprimir la lista C++
     cout << "[ ";
     for (int num : resultado) {
         cout << num << " ";
