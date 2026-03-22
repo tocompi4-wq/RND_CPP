@@ -1,0 +1,45 @@
+# ----------- Librerias -----------------
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+
+# --- Parámetros de "Trabajo Serio" ---
+M = 2**48
+a = 0x5DEECE66D
+c = 0xB
+r = 10  # Semilla inicial
+N_PUNTOS = 1000 # Usamos más puntos para apreciar la calidad
+
+def generar_lca_grande(a, c, M, r, n):
+    puntos = []
+    actual = r
+    for _ in range(n * 2): # Necesitamos el doble de números para pares (x,y)
+        actual = (a * actual + c) % M
+        puntos.append(actual / M) # Normalizamos a rango [0, 1]
+    return puntos
+
+# Generar datos de ambos métodos
+datos_lca = generar_lca_grande(a, c, M, r, N_PUNTOS)
+x_lca = datos_lca[0::2]
+y_lca = datos_lca[1::2]
+
+x_pc = [random.random() for _ in range(N_PUNTOS)]
+y_pc = [random.random() for _ in range(N_PUNTOS)]
+
+# --- Graficar ---
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Gráfico LCA Grande
+ax1.scatter(x_lca, y_lca, s=2, color='purple', alpha=0.5)
+ax1.set_title("LCA con M = 2^48 (Parámetros Java)")
+ax1.set_xlabel("r_{2i-1}")
+ax1.set_ylabel("r_{2i}")
+
+# Gráfico PC
+ax2.scatter(x_pc, y_pc, s=2, color='green', alpha=0.5)
+ax2.set_title("Generador Incorporado (PC)")
+ax2.set_xlabel("x")
+ax2.set_ylabel("y")
+
+plt.tight_layout()
+plt.show()
