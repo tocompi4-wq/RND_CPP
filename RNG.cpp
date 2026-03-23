@@ -9,7 +9,7 @@ vector<int> lineal_congruente(int a, int c, int M, int r) {
     vector<int> r_list; // Creamos el vector vacío
     r_list.push_back(r); // Equivalente a .append() en Python
     
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < (2 * M); i++) {
         r = (a * r + c) % M; // La fórmula es idéntica
         r_list.push_back(r);
     }
